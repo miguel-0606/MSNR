@@ -1,0 +1,174 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <style>
+        body {
+            font-family: Verdana, Geneva, Tahoma, sans-serif;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            background-color: rgba(97, 94, 94, 0.541);
+        }
+        .container {
+            width: 90%;
+            max-width: 1000px;
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.5);
+            margin-bottom: 20px;
+        }
+        label {
+            display: block;
+            font-weight: bold;
+            margin-top: 10px;
+        }
+        input, select, textarea {
+            width: 90%;
+            padding: 8px;
+            border: 1px solid #ccc;
+            border-radius: 10px;
+        }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 20px;
+        }
+        th, td {
+            border: 1px solid #ccc;
+            padding: 10px;
+            text-align: left;
+        }
+        th {
+            background-color: #f2f2f2;
+        }
+        img {
+            max-width: 100px;
+            border-radius: 5px;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>Registro de persona</h1>
+        <form id="formPersona">
+            <fieldset>
+                <legend>Datos personales</legend>
+                <label for="nombre">Nombre:</label>
+                <input type="text" name="nombre" id="nombre" required>
+
+                <label for="apellido">Apellido:</label>
+                <input type="text" name="apellido" id="apellido" required>
+
+                <label for="edad">Edad:</label>
+                <input type="number" name="edad" id="edad" required min="1">
+
+                <label for="genero">Genero:</label>
+                <select name="genero" id="genero">
+                    <option value="Masculino">Masculino</option>
+                    <option value="Femenino">Femenino</option>
+                    <option value="Otros">Otros</option>
+                </select>
+            </fieldset>
+
+            <fieldset>
+                <legend>Datos de contacto</legend>
+                <label for="telefono">Telefono:</label>
+                <input type="tel" name="telefono" id="telefono" required>
+
+                <label for="email">Correo Electronico:</label>
+                <input type="email" name="email" id="email" required>
+
+                <label for="password">Contraseña:</label>
+                <input type="password" name="password" id="password" required>
+            </fieldset>
+
+            <fieldset>
+                <legend>Datos adicionales</legend>
+                <label for="direccion">Direccion:</label>
+                <textarea id="direccion" name="direccion"></textarea>
+
+                <label for="fecha">Fecha Nacimiento:</label>
+                <input type="date" name="fecha" id="fecha" required>
+
+                <label for="imagen">Imagen:</label>
+                <input type="file" name="imagen" id="imagen" accept="image/*" required>
+            </fieldset>
+
+            <br>
+            <input type="submit" value="Guardar">
+        </form>
+    </div>
+
+    <div class="container">
+        <h2>Lista de Personas</h2>
+        <table id="tablaPersonas">
+            <thead>
+                <tr>
+                    <th>Nombre</th>
+                    <th>Apellido</th>
+                    <th>Edad</th>
+                    <th>Genero</th>
+                    <th>Telefono</th>
+                    <th>Email</th>
+                    <th>Direccion</th>
+                    <th>Fecha Nacimiento</th>
+                    <th>Imagen</th>
+                </tr>
+            </thead>
+
+            <tbody>
+
+            </tbody>
+        </table>
+    </div>
+    
+    <script>
+        const personas = [];
+        document.getElementById("formPersona").addEventListener("submit", function(event){
+            event.preventDefault();
+
+            const imagen = document.getElementById("imagen").files[0];
+            const reader = new FileReader();
+            reader.onloadend = function () {
+                const persona = {
+                    nombre: document.getElementById("nombre").value,
+                    apellido: document.getElementById("apellido").value,
+                    edad: document.getElementById("edad").value,
+                    genero: document.getElementById("genero").value,
+                    telefono: document.getElementById("telefono").value,
+                    email: document.getElementById("email").value,
+                    password: document.getElementById("password").value,
+                    direccion: document.getElementById("direccion").value,
+                    fecha: document.getElementById("fecha").value,
+                    imagen: reader.result
+                };
+                personas.push(persona);
+                FilaTabla(persona);
+            }
+            reader.readAsDataURL(imagen);
+        });
+
+        function FilaTabla(persona) {
+            const tabla = document.getElementById("tablaPersonas").querySelector("tbody");
+            const fila = document.createElement("tr");
+
+            fila.innerHTML = `
+                <td>${persona.nombre}</td>
+                <td>${persona.apellido}</td>
+                <td>${persona.edad}</td>
+                <td>${persona.genero}</td>
+                <td>${persona.telefono}</td>
+                <td>${persona.email}</td>
+                <td>${persona.direccion}</td>
+                <td>${persona.fecha}</td>
+                <td><img src="${persona.imagen}" alt="Imagen de ${persona.nombre}"></td>`   
+                ;
+            tabla.appendChild(fila);
+        }
+    </script>
+</body>
+</html>
